@@ -1,29 +1,31 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+     <a-locale-provider :locale="locale">
+      <router-view />
+    </a-locale-provider>
   </div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import zhCN from "ant-design-vue/lib/locale-provider/zh_CN";
+import enUS from "ant-design-vue/lib/locale-provider/en_US";
+import moment from "moment";
+import "moment/locale/zh-cn" // moment得打包优化，默认式英文包可以不用管，这里把需要得中文包引入进来，就会只打包 中英文包，其他不需要得语言包不会被打包进来。
+export default {
+  data () {
+    return {
+      locale: zhCN
+    }
+  },
+  watch: {
+    "$route.query.locale" (val) {
+      this.locale = val === "enUS" ? enUS : zhCN
+      moment.locale(val === "enUS" ? "en" : "zh-cn")
     }
   }
 }
+</script>
+
+
+<style lang="less">
 </style>
